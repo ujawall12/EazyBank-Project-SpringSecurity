@@ -1,6 +1,7 @@
 package com.springsecurity.eazybank.config;
 
 import com.springsecurity.eazybank.filter.CsrfCookieFilter;
+import com.springsecurity.eazybank.filter.RequestValidationBeforeFilter;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +55,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.csrfTokenRequestHandler(requestHandler)
                 .ignoringRequestMatchers("/contact", "/register","/myCards")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class);
         http.securityContext(securityContext -> securityContext
                 .requireExplicitSave(false)).sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
