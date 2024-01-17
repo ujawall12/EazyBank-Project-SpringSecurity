@@ -1,5 +1,6 @@
 package com.springsecurity.eazybank.config;
 
+import com.springsecurity.eazybank.model.Authorities;
 import com.springsecurity.eazybank.model.Customer;
 import com.springsecurity.eazybank.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         Customer customer= customerRepository.findByEmail(userName);
         if(customer!=null){
             if(passwordEncoder.matches(password, customer.getPassword())){
-                List<GrantedAuthority> authorities= new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority(customer.getRole()));
-                return new UsernamePasswordAuthenticationToken(userName, password, authorities);
+                return new UsernamePasswordAuthenticationToken(userName, password, getGrantedAuthorities(customer.getAuthorities()));
             }
             else{
                 throw new BadCredentialsException("Incorrect Password");
@@ -40,6 +39,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         else{
             throw new BadCredentialsException("No user found with username: " + userName);
         }
+    }
+
+    private List<GrantedAuthority> getGrantedAuthorities(List<Authorities> roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRole())));
+        return authorities;
     }
     @Override
     public boolean supports(Class<?> authentication) {

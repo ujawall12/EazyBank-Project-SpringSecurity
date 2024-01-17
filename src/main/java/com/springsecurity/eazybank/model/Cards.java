@@ -1,5 +1,6 @@
 package com.springsecurity.eazybank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class Cards {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_Id")
     private Long cardId;
 
@@ -41,7 +42,8 @@ public class Cards {
     @Column(name = "amount_used")
     private Double amountUsed;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId")
+    @JsonIgnore
     private Customer customer;
 }

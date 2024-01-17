@@ -23,6 +23,6 @@ public class CardsController {
         if(Objects.isNull(cards)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(cards);
+        return ResponseEntity.ok().body(cards);
     }
 }

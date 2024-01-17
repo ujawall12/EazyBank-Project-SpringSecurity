@@ -18,13 +18,14 @@ public class AccountTransactions {
 
     @Id
     @Column(name = "transaction_id")
-    private String transactionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long transactionId;
 
     @Column(name="account_number")
-    private long accountNumber;
+    private Long accountNumber;
 
     @Column(name = "customer_id")
-    private int customerId;
+    private Long customerId;
 
     @Column(name="transaction_dt")
     private Date transactionDt;
@@ -44,7 +45,7 @@ public class AccountTransactions {
     @Column(name = "create_dt")
     private String createDt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Accounts.class)
+    @JoinColumn(name = "account_number", referencedColumnName = "account_number", insertable = false, updatable = false)
     private Accounts account;
 }

@@ -1,8 +1,6 @@
 package com.springsecurity.eazybank.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,7 @@ public class Accounts {
 
     @Id
     @Column(name="account_number")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountNumber;
 
     @Column(name = "customer_id")
@@ -35,7 +34,7 @@ public class Accounts {
     @Column(name = "create_dt")
     private Date createDt;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<AccountTransactions> transactions;
 
 }
