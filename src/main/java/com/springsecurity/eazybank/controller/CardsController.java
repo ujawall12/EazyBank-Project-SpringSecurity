@@ -20,7 +20,7 @@ public class CardsController {
     @GetMapping("/myCards")
     public ResponseEntity<List<Cards>> getCardsDetails(@RequestParam Long customerId) {
         List<Cards> cards = cardsService.getCardsDetails(customerId);
-        if(Objects.isNull(cards)) {
+        if (Objects.isNull(cards)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(cards);

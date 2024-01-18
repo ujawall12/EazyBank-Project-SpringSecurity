@@ -13,12 +13,12 @@ public class LoginService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(Customer customer){
+    public void registerUser(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customerRepository.save(customer);
     }
 
-    public boolean checkIfUserExist(String email){
+    public boolean checkIfUserExist(String email) {
         return customerRepository.existsByEmail(email);
     }
 }

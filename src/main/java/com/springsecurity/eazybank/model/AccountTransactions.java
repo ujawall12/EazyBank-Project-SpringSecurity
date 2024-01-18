@@ -21,19 +21,19 @@ public class AccountTransactions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
 
-    @Column(name="account_number")
+    @Column(name = "account_number")
     private Long accountNumber;
 
     @Column(name = "customer_id")
     private Long customerId;
 
-    @Column(name="transaction_dt")
+    @Column(name = "transaction_dt")
     private Date transactionDt;
 
     @Column(name = "transaction_summary")
     private String transactionSummary;
 
-    @Column(name="transaction_type")
+    @Column(name = "transaction_type")
     private String transactionType;
 
     @Column(name = "transaction_amt")

@@ -18,14 +18,14 @@ import java.util.List;
 public class Accounts {
 
     @Id
-    @Column(name="account_number")
+    @Column(name = "account_number")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountNumber;
 
     @Column(name = "customer_id")
     private Long customerId;
 
-    @Column(name="account_type")
+    @Column(name = "account_type")
     private String accountType;
 
     @Column(name = "branch_address")

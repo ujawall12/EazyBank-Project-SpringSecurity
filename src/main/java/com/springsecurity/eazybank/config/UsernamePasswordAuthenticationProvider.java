@@ -23,20 +23,19 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String userName = authentication.getName();
-        String password= authentication.getCredentials().toString();
-        Customer customer= customerRepository.findByEmail(userName);
-        if(customer!=null){
-            if(passwordEncoder.matches(password, customer.getPassword())){
+        String password = authentication.getCredentials().toString();
+        Customer customer = customerRepository.findByEmail(userName);
+        if (customer != null) {
+            if (passwordEncoder.matches(password, customer.getPassword())) {
                 return new UsernamePasswordAuthenticationToken(userName, password, getGrantedAuthorities(customer.getAuthorities()));
-            }
-            else{
+            } else {
                 throw new BadCredentialsException("Incorrect Password");
             }
-        }
-        else{
+        } else {
             throw new BadCredentialsException("No user found with username: " + userName);
         }
     }
@@ -46,6 +45,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRole())));
         return authorities;
     }
+
     @Override
     public boolean supports(Class<?> authentication) {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));

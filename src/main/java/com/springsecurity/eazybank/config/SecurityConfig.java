@@ -1,13 +1,12 @@
 package com.springsecurity.eazybank.config;
 
-import com.springsecurity.eazybank.filter.CsrfCookieFilter;
-import com.springsecurity.eazybank.filter.RequestValidationBeforeFilter;
+import com.springsecurity.eazybank.filter.JWTTokenGeneratorFilter;
+import com.springsecurity.eazybank.filter.JWTTokenValidationFilter;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,38 +31,38 @@ public class SecurityConfig {
 
     @Bean
     @SneakyThrows
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http){
+    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
 
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName("_csrf");
         http.authorizeHttpRequests(
-                requests->requests
-                        /*.requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
-                        .requestMatchers("/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE")
-                        .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
-                        .requestMatchers("/myCards").hasAuthority("VIEWCARDS")*/
-                        .requestMatchers("/myAccount").hasRole("USER")
-                        .requestMatchers("/myBalance").hasAnyRole("USER","ADMIN")
-                        .requestMatchers("/myLoans").hasRole("USER")
-                        .requestMatchers("/myCards").hasRole("USER")
-                        .requestMatchers("/user").authenticated()
-                        .requestMatchers("/notices","/contact","/register").permitAll())
-                        .formLogin(Customizer.withDefaults())
-                        .httpBasic(Customizer.withDefaults());
+                        requests -> requests
+                                /*.requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
+                                .requestMatchers("/myBalance").hasAnyAuthority("VIEWACCOUNT","VIEWBALANCE")
+                                .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
+                                .requestMatchers("/myCards").hasAuthority("VIEWCARDS")*/
+                                .requestMatchers("/myAccount").hasRole("USER")
+                                .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/myLoans").hasRole("USER")
+                                .requestMatchers("/myCards").hasRole("USER")
+                                .requestMatchers("/user").authenticated()
+                                .requestMatchers("/notices", "/contact", "/register").permitAll())
+                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults());
         http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
-
         http.csrf(csrf -> csrf.csrfTokenRequestHandler(requestHandler)
-                .ignoringRequestMatchers("/contact", "/register","/myCards")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class);
-        http.securityContext(securityContext -> securityContext
-                .requireExplicitSave(false)).sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                        .ignoringRequestMatchers("/contact", "/register")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+//                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+//                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JWTTokenValidationFilter(), BasicAuthenticationFilter.class);
 
-    return http.build();
+        return http.build();
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -74,6 +73,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

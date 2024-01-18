@@ -20,7 +20,7 @@ public class BalanceController {
     @GetMapping("/myBalance")
     public ResponseEntity<List<AccountTransactions>> getBalanceDetails(@RequestParam Long customerId) {
         List<AccountTransactions> accountTransactions = balanceService.getBalance(customerId);
-        if(Objects.isNull(accountTransactions)) {
+        if (Objects.isNull(accountTransactions)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(accountTransactions);

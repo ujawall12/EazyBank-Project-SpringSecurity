@@ -16,11 +16,11 @@ import java.util.Date;
 public class Loans {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @Column(name = "loan_number")
     private Long loanNumber;
 
-    @Column(name="start_dt")
+    @Column(name = "start_dt")
     private Date startDt;
 
     @Column(name = "loan_type")

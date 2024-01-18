@@ -20,7 +20,7 @@ public class ContactController {
     @GetMapping("/myContact")
     public ResponseEntity<List<ContactDetails>> getContactDetails(@RequestParam Long contactId) {
         List<ContactDetails> contactDetails = contactService.getContactDetails(contactId);
-        if(Objects.isNull(contactDetails)) {
+        if (Objects.isNull(contactDetails)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(contactDetails);

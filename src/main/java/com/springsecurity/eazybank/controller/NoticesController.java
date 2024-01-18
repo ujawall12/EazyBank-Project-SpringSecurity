@@ -20,7 +20,7 @@ public class NoticesController {
 
     @GetMapping("/myNotices")
     public ResponseEntity<NoticeDetails> getNoticesDetails(@RequestParam Long noticeId) {
-        if(Objects.isNull(noticesService.getNoticeDetails(noticeId))) {
+        if (Objects.isNull(noticesService.getNoticeDetails(noticeId))) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS))

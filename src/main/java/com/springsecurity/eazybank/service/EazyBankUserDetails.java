@@ -20,20 +20,20 @@ import java.util.List;
 public class EazyBankUserDetails implements UserDetailsService {
 
     private final CustomerRepository customerRepository;
+
     @Override
     @SneakyThrows
     public UserDetails loadUserByUsername(String username) {
         String userName;
-        String password=null;
-        List<GrantedAuthority> authorities=null;
-        Customer customer=customerRepository.findByEmail(username);
-        if(customer==null){
+        String password = null;
+        List<GrantedAuthority> authorities = null;
+        Customer customer = customerRepository.findByEmail(username);
+        if (customer == null) {
             throw new UsernameNotFoundException("User details not found for the user " + username);
-        }
-        else{
-            userName=customer.getEmail();
-            password=customer.getPassword();
-            authorities=List.of();
+        } else {
+            userName = customer.getEmail();
+            password = customer.getPassword();
+            authorities = List.of();
             authorities.add(new SimpleGrantedAuthority(customer.getRole()));
             return new User(userName, password, authorities);
         }

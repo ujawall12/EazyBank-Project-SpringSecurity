@@ -19,7 +19,7 @@ public class AccountController {
     @GetMapping("/myAccount")
     public ResponseEntity<Accounts> getAccountDetails(@RequestParam Long id) {
         Accounts accounts = accountsService.getAccountDetails(id);
-        if(Objects.isNull(accounts)) {
+        if (Objects.isNull(accounts)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(accounts);

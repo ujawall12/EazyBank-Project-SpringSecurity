@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
+
     public NoticeDetails getNoticeDetails(Long noticeId) {
         return noticeRepository.findById(noticeId).orElse(null);
     }

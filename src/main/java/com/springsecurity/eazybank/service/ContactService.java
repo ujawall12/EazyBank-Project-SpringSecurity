@@ -12,7 +12,8 @@ import java.util.List;
 public class ContactService {
 
     private final ContactRepository contactRepository;
-    public List<ContactDetails> getContactDetails(Long contactId){
+
+    public List<ContactDetails> getContactDetails(Long contactId) {
         return contactRepository.findAllByContactId(contactId);
     }
 }

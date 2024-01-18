@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class LoanService {
 
     private final LoansRepository loanRepository;
+
     public Loans getLoansDetails(Long loanNumber) {
         return loanRepository.findById(loanNumber).orElse(null);
     }

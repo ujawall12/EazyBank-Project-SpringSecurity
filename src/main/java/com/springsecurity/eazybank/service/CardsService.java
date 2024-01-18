@@ -13,7 +13,7 @@ public class CardsService {
 
     private final CardRepository cardRepository;
 
-    public List<Cards> getCardsDetails(Long customerId){
+    public List<Cards> getCardsDetails(Long customerId) {
         return cardRepository.findAllByCustomerId(customerId);
     }
 

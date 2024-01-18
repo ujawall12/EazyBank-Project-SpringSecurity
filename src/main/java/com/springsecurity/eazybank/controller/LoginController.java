@@ -17,11 +17,11 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@NonNull @RequestBody Customer customer){
-        if(loginService.checkIfUserExist(customer.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exist with email: "+customer.getEmail());
+    public ResponseEntity<String> registerUser(@NonNull @RequestBody Customer customer) {
+        if (loginService.checkIfUserExist(customer.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exist with email: " + customer.getEmail());
         }
         loginService.registerUser(customer);
-        return new ResponseEntity<>("User registered with email "+customer.getEmail(),HttpStatus.CREATED);
+        return new ResponseEntity<>("User registered with email " + customer.getEmail(), HttpStatus.CREATED);
     }
 }
